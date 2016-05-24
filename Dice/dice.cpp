@@ -1,10 +1,17 @@
-/*
-  enum型を使って書き直した方が直感的
- */
-
-#include <iostream>
+#include <bits/stdc++.h>
 
 using namespace std;
+
+/*
+  1(0) -> TOP
+  2(1) -> FRONT
+  3(2) -> RIGHT
+  4(3) -> LEFT
+  5(4) -> BACK
+  6(5) -> BOTTOM
+  
+  ()中の数字は添字  
+*/
 
 template<class T>
 class Dice {
@@ -16,11 +23,11 @@ private:
     }
 public:
     T x[6];
-    void roll_N(){ roll(0,1,4,5); }
-    void roll_E(){ roll(0,3,2,5); }
-    void roll_S(){ roll(0,4,1,5); }
-    void roll_W(){ roll(0,2,3,5); }
-    void rotation(){ roll(1,2,3,4); }
+    void roll_N(){ roll(0, 1, 4, 5); }
+    void roll_E(){ roll(0, 3, 2, 5); }
+    void roll_S(){ roll(0, 4, 1, 5); }
+    void roll_W(){ roll(0, 2, 3, 5); }
+    void rotation(){ roll(1, 2, 3, 4); }
     
     void roll(int top, int front)
     {
