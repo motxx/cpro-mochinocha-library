@@ -1,0 +1,1 @@
+template<class value_type> value_type mod_mul(value_type x, value_type k, ll m) { if(k == 0) { return 0; } if(k % 2 == 0) { return mod_mul((x+x) % m, k/2, m); } else { return (x + mod_mul(x, k-1, m)) % m; } }
