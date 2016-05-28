@@ -76,6 +76,15 @@ struct Segment {
 
 typedef Segment Line;
 
+/*
+ 直線を始点とベクトルで表す方式
+*/
+struct LineSD {
+ Point3D src, dir;
+ LineSD() {}
+ LineSD(Point3D src, Point3D dir) : src(src), dir(dir) {}
+};
+
 Point3D projection(const Line &l, const Point3D &p)
 {
     Point3D b = l.t - l.s;
@@ -83,7 +92,24 @@ Point3D projection(const Line &l, const Point3D &p)
     return l.s + b*t;
 }
 
+/*
+ Verified: AOJ1289 Spherical Mirrors
+*/
+Point3D projection(const LineSD &l, const Point3D &p)
+{
+ double t = dot(p - l.src, l.dir) / norm(l.dir);
+ return l.src + l.dir * t;
+}
+
 double distanceLP(const Line &l, const Point3D &p)
+{
+    return abs(p - projection(l, p));
+}
+
+/*
+ Verified: AOJ1289 Spherical Mirrors
+*/
+double distanceLP(const LineSD &l, const Point3D &p)
 {
     return abs(p - projection(l, p));
 }
@@ -215,6 +241,55 @@ struct Sphere {
 	return PI*r*r*r*4.0/3.0;
     }
 };
+
+/*
+ 球体と直線の反射
+ Verified: AOJ1289 Spherical Mirrors
+
+ 引数: 球体s, 球体と直線の交点crp, 直線l: lineSD
+ 戻り値: 反射後の直線(LineSD)
+*/
+LineSD reflectionSL(const Sphere &s, const Point3D &crp, const LineSD &l) {
+  auto& O = s.p;
+  auto& P = crp;
+  double theta = acos(dot(l.src - P, P - O) / abs(l.src - P) / abs(P - O));
+  double phi = PI / 2 - theta;
+  double K = abs(l.src - P) * sin(phi);
+  Point3D e = (O - P) / abs(O - P);
+  Point3D S = l.src + e * (K * 2);
+  Point3D R = P + (P - S);
+  return LineSD(P, R - P);
+}
+
+/*
+ 球体と直線が交差するか判定
+ Verified: AOJ1289 Spherical Mirrors
+
+ 引数: 球体s, 直線l: lineSD
+ 戻り値: Y/N
+*/
+bool isIntersectSL(const Sphere &s, const LineSD &l)
+{
+  return distanceLP(l, s.p) <= s.r + EPS;
+}
+
+/*
+ 球体と直線の交点
+ Verified: AOJ1289 Spherical Mirrors
+
+ 引数: 球体s, 直線l: lineSD
+ 戻り値: 2つの交点
+ 備考: 先にisIntersectSL()で交差するか調べる必要がある
+*/
+vector<Point3D> getIntersectSL(const Sphere &s, const LineSD &l)
+{
+  auto& O = s.p;
+  auto T = projection(l, s.p);
+  auto TO = T - O;
+  auto e = l.dir / abs(l.dir);
+  auto len = sqrt(s.r * s.r - norm(TO));
+  return {T + e * len, T - e * len};
+}
 
 bool cover(const Sphere &s, const Point3D &p)
 {
