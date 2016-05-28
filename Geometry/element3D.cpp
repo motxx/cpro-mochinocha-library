@@ -63,6 +63,11 @@ istream &operator >> (istream &is, Point3D &p)
     return is >> p.x >> p.y >> p.z;
 }
 
+ostream &operator << (ostream &os, Point3D &p)
+{
+    return os << "(" << p.x << ", " << p.y << ", " << p.z << ")";
+}
+
 struct Segment {
     Point3D s, t;
     Segment(){}
