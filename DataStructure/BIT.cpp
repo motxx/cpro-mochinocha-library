@@ -1,4 +1,4 @@
-#include <iostream>
+#include <bits/stdc++.h>
 
 using namespace std;
 
@@ -10,9 +10,8 @@ public:
   
     BIT()
     {
-	for (int i = 0; i < MAX_N; i++) {
-	    bit[i] = 0;
-	}
+        n = MAX_N;
+        memset(bit, 0, sizeof(bit));
     }
 
     int sum(int i)
@@ -25,7 +24,7 @@ public:
 	return s;
     }
   
-    void add(int i,int x)
+    void add(int i, int x)
     {
 	while (i <= n) {
 	    bit[i] += x;
