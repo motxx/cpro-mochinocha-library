@@ -2,7 +2,7 @@ namespace tree {
 
 using tree_type = vector<vector<int>>;
 
-std::string to_string(tree_type const& t, int v, int par = -1) {
+string to_string(tree_type const& t, int v, int par = -1) {
   ostringstream oss;
   oss << '(';
   vector<string> children;
